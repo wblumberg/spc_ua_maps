@@ -15,7 +15,9 @@ and easier to identify trends as one of my favorite parts of the original maps
 were the existance of the height/temperature/dewpoint 12-hour tendencies.
 
 This codebase contains two primary scripts:
+
 get_realtime.py - a script to pull the UA data from the Motherlode UCAR data source and dump it into a CSV file.
+
 plot_SPCUA.py - a script that will read 2 CSV files and construct the map based on a user specified pressure level.
 
     These maps provide 8 different types of data at the UA stations.
