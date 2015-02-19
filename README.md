@@ -4,8 +4,6 @@ Author: Greg Blumberg (OU/CIMMS/SoM)
 
 Email: wblumberg@ou.edu
 
-Code to produce colorized versions of the SPC UA maps.
-
 ---------------------------------------------------------------------------
 
 This repository contains code that can be used to recreate the SPC UA maps
