@@ -32,5 +32,6 @@ plot_SPCUA.py - a script that will read 2 CSV files and construct the map based 
     1.) Upper right (+,red;-,blue) - geopotential height tendency (decameters)
     2.) Middle right (+,red;-,blue) - temperature tendency (Celsius)
     3.) Lower right (+,green;-,orange/brown) - dewpoint tendency (Celsius)
+    
     Lift:
     1.) Dewpoint depression in bold at the top if the dewpoint depression <= 5 Celsius.
