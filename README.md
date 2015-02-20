@@ -12,7 +12,8 @@ frustrated with the inabilty to see the numbers at each station well and also
 unable to retrieve archived unanalyzed UA maps.  In order to improve the maps,
 I decided to make them in color in order to make the values easier to identify
 and easier to identify trends as one of my favorite parts of the original maps
-were the existance of the height/temperature/dewpoint 12-hour tendencies.
+were the existance of the height/temperature/dewpoint 12-hour tendencies and
+the dewpoint depression information.
 
 This codebase contains two primary scripts:
 
