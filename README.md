@@ -1,4 +1,4 @@
-#Colorized SPC Upper Air Maps
+#Colored SPC Upper Air Maps
 
 Author: Greg Blumberg (OU/CIMMS/SoM)
 
