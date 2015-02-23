@@ -221,8 +221,8 @@ for now_idx, past_idx in index_pairs:
     
     print "PLOTTING WINDS..."
     try:
-        wdir = float(cur[10])
-        wspd = float(cur[9])
+        wdir = float(cur[9])
+        wspd = float(cur[10])
         u, v = vec2comp(wdir, wspd)
         u_map, v_map = m.rotate_vector(np.asarray([[u]]), np.asarray([[v]]), np.asarray([[lon]]), np.asarray([[lat]]))
         m.barbs(x,y, u_map[0][0],v_map[0][0], length=8, sizes={'spacing':.15,'width':.15,'height':.35,'emptybarb':.001})
