@@ -8,6 +8,7 @@ import sys
 from datetime import datetime, timedelta
 import gc
 import grayify as gfy
+import os
 
 """
     plot_SPCUA.py
@@ -79,8 +80,14 @@ level = sys.argv[3]
 dt = datetime.strptime(yyyymmdd+hr, '%Y%m%d%H')
 dt_past = dt - timedelta(seconds=60*60*12)
 
-cur_data = np.loadtxt(yyyymmdd+hr+'.csv', delimiter=',', dtype=str)
-past_data = np.loadtxt(datetime.strftime(dt_past, '%Y%m%d%H.csv'), delimiter=',', dtype=str)
+import glob
+
+path = '/data/soundings/blumberg/programs/spc_ua_maps/'
+csvs = glob.glob(path + '*.csv')
+print csvs
+path = '/data/soundings/blumberg/programs/spc_ua_maps/'
+cur_data = np.loadtxt(path + yyyymmdd + hr + '.csv', delimiter=',', dtype=str)
+past_data = np.loadtxt(datetime.strftime(dt_past, path + '%Y%m%d%H.csv'), delimiter=',', dtype=str)
 
 fil = np.where(np.asarray(cur_data[:,5], dtype=float) == int(level))
 cur_data = cur_data[fil,:]
@@ -93,9 +100,10 @@ for i in xrange(len(cur_data[0])):
     idx = np.where(past_data[0,:,0] == sta)[0]
     if len(idx) > 0:
         index_pairs.append((i, idx[0]))
+
 """
 # Here is where I wanted to have an option to overlay the reflectivity in light
-gray al la the SPC Mesoanalysis surface observation PDF files.
+#gray al la the SPC Mesoanalysis surface observation PDF files.
 # Load in the radar data if you want to
 radarlink = "http://thredds.ucar.edu/thredds/dodsC/nexrad/composite/gini/n0r/1km/%Y%m%d/Level3_Composite_n0r_1km_%Y%m%d_%H%M.gini"
 radar_dat = Dataset(datetime.strftime(dt, radarlink))
@@ -124,6 +132,10 @@ plt.pcolormesh(ref_x, ref_y, ref, cmap=gfy.grayify_cmap('autumn_r'), vmin=30, vm
 """
 
 offset = 1e4
+
+wspds = []
+xs = []
+ys = []
 for now_idx, past_idx in index_pairs:
     gc.collect()
     cur = cur_data[0, now_idx]
@@ -221,17 +233,19 @@ for now_idx, past_idx in index_pairs:
     
     print "PLOTTING WINDS..."
     try:
-        wdir = float(cur[9])
-        wspd = float(cur[10])
+        wdir = float(cur[10])
+        wspd = float(cur[9])
         u, v = vec2comp(wdir, wspd)
         u_map, v_map = m.rotate_vector(np.asarray([[u]]), np.asarray([[v]]), np.asarray([[lon]]), np.asarray([[lat]]))
+        xs.append(x)
+        ys.append(y)
+        wspds.append(wspd)
         m.barbs(x,y, u_map[0][0],v_map[0][0], length=8, sizes={'spacing':.15,'width':.15,'height':.35,'emptybarb':.001})
     except:
         print "UNABLE TO PLOT WINDS."
-    
+
 map_details_x, map_details_y = m(-95,24) 
 plt.text(map_details_x, map_details_y, str(level) + ' mb ' + datetime.strftime(dt, "%Y%m%d/%H%M"), fontsize=18, fontweight='bold', fontstyle='italic') 
 plt.tight_layout()
-plt.savefig(datetime.strftime(dt, '%Y%m%d_%H_') + str(int(level)) + '.pdf',bbox_inches='tight', pad_inches=0)
-
+plt.savefig(path + datetime.strftime(dt, '%Y%m%d_%H_') + str(int(level)) + '.pdf',bbox_inches='tight', pad_inches=0)
 

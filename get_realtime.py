@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from netCDF4 import Dataset, num2date
 import glob
 import sys
+import os
 
 """
     get_realtime.py
@@ -26,10 +27,11 @@ hr = sys.argv[2]
 link = 'http://unidata2-new.ssec.wisc.edu/decoded/netcdf/upperair/Upperair_%Y%m%d_0000.nc'
 
 link = link.replace('%Y%m%d', yyyymmdd)
-call(['wget', link])
+call(['wget', '--directory-prefix=/data/soundings/blumberg/programs/spc_ua_maps/', link])
 
 units = 'seconds since 1970-01-01 00:00:00+00:00'
-now_dataset = Dataset(link.split('/')[-1])
+
+now_dataset = Dataset('/data/soundings/blumberg/programs/spc_ua_maps/' + link.split('/')[-1])
 now_dts = num2date(now_dataset.variables['synTime'][:], units)
 print now_dataset.variables.keys()
 now_stations = []
@@ -52,7 +54,7 @@ wdirMand = now_dataset.variables['wdMan'][idx,:]
 now_stations = np.asarray(now_stations)[idx]
 now_stations = np.where(now_stations == '', '--', now_stations)
 
-out = open(yyyymmdd+hr + '.csv', 'w')
+out = open('/data/soundings/blumberg/programs/spc_ua_maps/'+yyyymmdd+hr + '.csv', 'w')
 for i, sta in enumerate(zip(now_stations, wmoID)):
     for l in xrange(len(presMand[i])):
         if type(presMand[i,l]) != np.ma.core.MaskedConstant:
@@ -60,5 +62,5 @@ for i, sta in enumerate(zip(now_stations, wmoID)):
             print line
             out.write(line + '\n')
 out.close()
-
+os.system('rm /data/soundings/blumberg/programs/spc_ua_maps/*.nc')
 
